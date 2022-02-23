@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,19 +55,15 @@ class _MyHomePageState extends State<MyHomePage> {
   String? message = '';
 
   Future loadMyModel() async {
-    
     var resultant = await Tflite.loadModel(
       labels: "assets/document.txt",
       model: "assets/plant_predictor_tf_binary_15.tflite",
     );
 
     print("result after loading model: $resultant");
-    
   }
-  checkImage(File file) async
-  {
-    
 
+  checkImage(File file) async {
     var resalt = await Tflite.runModelOnImage(
         path: file.path,
         numResults: 2,
@@ -80,87 +75,64 @@ class _MyHomePageState extends State<MyHomePage> {
     print("first res");
     print(resalt![0]["label"]);
 
-   print(resalt[0]["label"]==" plant");
+    print(resalt[0]["label"] == " plant");
 
-   // return;
+    // return;
 
-
-    
-    if(resalt[0]["label"]==" plant") {
+    if (resalt[0]["label"] == " plant") {
       print("helloooooo");
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: IconButton(
-                icon: Icon(
-                  Icons.warning,
-                  color: Colors.yellow,
-                ),
-                iconSize: 55.0,
-                onPressed: () {},
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: IconButton(
+              icon: Icon(
+                Icons.warning,
+                color: Colors.yellow,
               ),
-              content: Text(
-                'The Image does not seem to be a leaf. Do you still want to continiue?',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red),
-              ),
-              actions: [
-                Center(
-                  child: TextButton.icon(
-                    onPressed: () async {
-                        var resultantant = await Tflite.loadModel(
-                                    labels: "assets/labels.txt",
-                                    model: "assets/model_unquant.tflite",
-                                  );
-                 print("result after loading model: $resultantant");
-                        predict(file);},
-                    icon: Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      size: 33.0,
-                    ),
-                    label: Text(
-                      'Back Home',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+              iconSize: 55.0,
+              onPressed: () {},
+            ),
+            content: Text(
+              'The Image does not seem to be a leaf. Do you still want to continiue?',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.red),
+            ),
+            actions: [
+              Center(
+                child: TextButton.icon(
+                  onPressed: () async {
+                    var resultantant = await Tflite.loadModel(
+                      labels: "assets/labels.txt",
+                      model: "assets/model_unquant.tflite",
+                    );
+                    print("result after loading model: $resultantant");
+                    predict(file);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios_new_outlined,
+                    size: 33.0,
                   ),
-                )
-              ],
-            );
-          },
-        );
-      } else {
-        //Navigator.pushNamed(context, AppRoutes.homePage);
-        var resultantant = await Tflite.loadModel(
-                                    labels: "assets/labels.txt",
-                                    model: "assets/model_unquant.tflite",
-                                  );
-                 print("result after loading model: $resultantant");
-                        predict(file);
-      }
-
-
+                  label: Text(
+                    'Back Home',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      //Navigator.pushNamed(context, AppRoutes.homePage);
+      var resultantant = await Tflite.loadModel(
+        labels: "assets/labels.txt",
+        model: "assets/model_unquant.tflite",
+      );
+      print("result after loading model: $resultantant");
+      predict(file);
+    }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   void initState() {
